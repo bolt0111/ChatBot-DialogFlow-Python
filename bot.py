@@ -16,7 +16,14 @@ def send_welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    bot.send_message(message.chat.id, message_generator.random_words(number_words))
+    try:
+        if message.text == '-':
+            bot.send_message(message.chat.id, message_generator.random_words(number_words))
+        else:
+            bot.send_message(message.chat.id, message_generator.parse_word_definition(message.text.lower()))
+    except Exception:
+        bot.send_message(message.chat.id, message_generator.error_message())
+        bot.send_sticker(message.chat.id, message_generator.Sticker.error)
 
 
 bot.polling()
