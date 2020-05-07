@@ -17,10 +17,10 @@ class Emoji:
 
 
 def random_words(number):
-    random_numbers = random.sample(word_dictionary.keys(), number)
+    random_numbers = random.sample(word_dictionary, number)
     result = ""
-    for key in random_numbers:
-        result = result + Emoji.zap + key + "\n" + word_dictionary.get(key) + "\n\n"
+    for word in random_numbers:
+        result = result + Emoji.zap + word.name + "\n" + word.definition + "\n\n"
     return result
 
 
