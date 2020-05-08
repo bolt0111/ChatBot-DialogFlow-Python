@@ -33,6 +33,13 @@ def error_message():
     return "Oh well ... Something went wrong"
 
 
+def message_help(commands):
+    help_text = "The following commands are available: \n\n"
+    for key in commands:
+        help_text += "/" + key + ": " + commands[key] + "\n"
+    return help_text
+
+
 def parse_word_definition(message):
     word = eng_api.get_word_definition(message)
     word_definition = word.name + "\n" + word.origin + "\n" + word.phonetic + "\n"
