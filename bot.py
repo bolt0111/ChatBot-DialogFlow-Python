@@ -33,6 +33,7 @@ def send_text(message):
         if message.text == '-':
             bot.send_message(message.chat.id, message_generator.random_words(number_words))
         else:
+            bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
             bot.send_message(message.chat.id, message_generator.parse_word_definition(message.text.lower()))
     except Exception:
         bot.send_message(message.chat.id, message_generator.error_message())
