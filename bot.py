@@ -2,9 +2,10 @@ import telebot
 from telebot import apihelper
 
 import message_generator
+import security
 
-bot = telebot.TeleBot("1225997731:AAEVtBib-Ho4vMof1-CE5NuK-SqXaKLKgoI")
-apihelper.proxy = {'https': 'socks5h://416062411:fgq4hlS6@orbtl.s5.opennetwork.cc:999'}
+bot = telebot.TeleBot(security.TOKEN)
+apihelper.proxy = {'https': security.PROXY}
 
 commands = {  # command description used in the "help" command
     'start': 'Start learning English',
