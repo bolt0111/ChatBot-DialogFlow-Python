@@ -1,3 +1,6 @@
+import time
+
+import schedule
 import telebot
 from telebot import apihelper
 
@@ -22,6 +25,25 @@ def send_welcome(message):
     command_help(message)
 
 
+@bot.message_handler(commands=['subscribe'])
+def subscribe(message):
+    try:
+        schedule.every().day.at('12:00').do(subscribe_message, message)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    except Exception as e:
+        print("subscribing error: " + str(e) + "\n")
+
+
+@bot.message_handler(commands=['unsubscribe'])
+def unsubscribe():
+    try:
+        schedule.cancel_job(subscribe_message)
+    except Exception as e:
+        print("unsubscribe error: " + str(e) + "\n")
+
+
 @bot.message_handler(commands=['help'])
 def command_help(message):
     bot.send_message(message.chat.id, message_generator.message_help(commands))
@@ -29,16 +51,18 @@ def command_help(message):
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def send_text(message):
-    number_words = 5
     try:
-        if message.text == '-':
-            bot.send_message(message.chat.id, message_generator.random_words(number_words))
-        else:
-            bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
-            bot.send_message(message.chat.id, message_generator.parse_word_definition(message.text.lower()))
-    except Exception:
+        bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
+        bot.send_message(message.chat.id, message_generator.parse_word_definition(message.text.lower()))
+    except Exception as e:
+        print("Error with getting word definition: " + str(e))
         bot.send_message(message.chat.id, message_generator.error_message())
         bot.send_sticker(message.chat.id, message_generator.Sticker.error)
+
+
+def subscribe_message(message):
+    number_words = 5
+    bot.send_message(message.chat.id, message_generator.random_words(number_words))
 
 
 bot.polling()
