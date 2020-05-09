@@ -2,8 +2,9 @@ from emoji import emojize
 
 
 class Sticker:
-    start = "CAACAgIAAxkBAAJgm160BuSWPFMPVMTqEfEBUlyyXmxXAAK4AAMw1J0R92WGDc8M6xUZBA"
-    error = "CAACAgIAAxkBAAJgyF60QXVbKI-P1OazlkXJGNzKA1uCAALSAAMw1J0RgmKBtdzOYJcZBA"
+    start = "CAACAgIAAxkBAAJlvV62spvcM24UodEoOMaOBqm3VQ2JAAIMAAPLm8wYVeUb04BjW2wZBA"
+    error = "CAACAgIAAxkBAAJlv162srQ4pKVlw_GTpi2LWHi7udoHAAILAAPLm8wYHXFmgN4_n68ZBA"
+    smile = "CAACAgIAAxkBAAJlwV62ss5B_1oEs4p6WJ6AVkquBP0hAAIKAAPLm8wYZd7Zi1a78BwZBA"
 
 
 class Emoji:
