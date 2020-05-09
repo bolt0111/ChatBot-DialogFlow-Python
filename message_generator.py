@@ -11,6 +11,7 @@ class Emoji:
     smile = emojize(":relaxed:", use_aliases=True)
     sad = emojize(':pensive:', use_aliases=True)
     confused = emojize(':face_with_monocle:', use_aliases=True)
+    check = emojize(":white_check_mark:", use_aliases=True)
 
 
 class Message:

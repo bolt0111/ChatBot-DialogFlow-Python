@@ -23,10 +23,10 @@ def __parse_word_meaning(meaning):
         meaning_key = meaning.get(key)
         if meaning_key is not None:
             meaning_noun = meaning_key[0]
-            meanings.append(WordMeaning("noun",
-                                        meaning_noun.get('definition', ''),
-                                        meaning_noun.get('example', ''),
-                                        meaning_noun.get('synonyms', [])))
+            meanings.append(WordMeaning(key,
+                                        meaning_noun.get('definition', None),
+                                        meaning_noun.get('example', None),
+                                        meaning_noun.get('synonyms', None)))
     return meanings
 
 
@@ -36,20 +36,37 @@ def __parse_word_definition(word):
         raise Exception('Can not load words due to error {}'.format(response.status_code))
     data = response.json()[0]
     return WordDefinition(data['word'],
-                          data.get('phonetic', ''),
-                          data.get('origin', ''),
+                          data.get('phonetic', None),
+                          data.get('origin', None),
                           __parse_word_meaning(data['meaning']))
+
+
+def __parse_synonyms(synonyms):
+    if synonyms is not None:
+        return "*Synonyms:* " + ' / '.join(synonyms) + "\n"
+    else:
+        return ""
+
+
+def __parse_information(definition_name, definition):
+    if definition is not None:
+        return definition_name + " " + definition + "\n"
+    else:
+        return ""
 
 
 def parse_word_definition(message):
     word = __parse_word_definition(message)
-    word_definition = word.name + "\n" + word.origin + "\n" + word.phonetic + "\n"
+    word_definition = __parse_information(message_generator.Emoji.zap, "*" + word.name + "*") + "\n" + \
+                      __parse_information("[", word.origin + "]") + "\n" + \
+                      __parse_information("**", word.phonetic + "**") + "\n\n"
+
     for definition in word.definitions:
         word_definition = word_definition + \
-                          definition.type + "\n" + \
-                          definition.definition + "\n" + \
-                          definition.example + "\n" + \
-                          ' '.join(definition.synonyms) + "\n\n"
+                          __parse_information(message_generator.Emoji.check, definition.type) + \
+                          __parse_information("*Meaning:*", definition.definition) + \
+                          __parse_information("*Example:*", definition.example) + \
+                          __parse_synonyms(definition.synonyms) + "\n"
     return word_definition
 
 

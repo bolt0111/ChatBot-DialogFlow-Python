@@ -60,7 +60,8 @@ def command_translate(message):
 def command_translate_word(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
-        bot.send_message(message.chat.id, english_api.parse_word_definition(message.text.lower()))
+        bot.send_message(message.chat.id, english_api.parse_word_definition(message.text.lower()),
+                         parse_mode='Markdown')
     except Exception as e:
         print("Error with getting word definition: " + str(e))
         bot.send_message(message.chat.id, message_generator.Message.error)
