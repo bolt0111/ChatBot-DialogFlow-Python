@@ -1,9 +1,12 @@
+import random
+
 import requests
 
-from word import WordTranslation, WordDefinition, WordMeaning
+import message_generator
+from api.word import WordTranslation, WordMeaning, WordDefinition
 
 
-def load_words():
+def __load_words():
     word_list = []
     response = requests.get('https://www.randomlists.com/data/vocabulary-words.json')
     if response.status_code != 200:
@@ -13,7 +16,7 @@ def load_words():
     return word_list
 
 
-def get_word_meaning(meaning):
+def __get_word_meaning(meaning):
     meanings = []
     keys = ['noun', 'exclamation', 'transitive verb']
     for key in keys:
@@ -27,7 +30,7 @@ def get_word_meaning(meaning):
     return meanings
 
 
-def get_word_definition(word):
+def __get_word_definition(word):
     response = requests.get('https://api.dictionaryapi.dev/api/v1/entries/en/' + word)
     if response.status_code != 200:
         raise Exception('Can not load words due to error {}'.format(response.status_code))
@@ -35,4 +38,27 @@ def get_word_definition(word):
     return WordDefinition(data['word'],
                           data.get('phonetic', ''),
                           data.get('origin', ''),
-                          get_word_meaning(data['meaning']))
+                          __get_word_meaning(data['meaning']))
+
+
+def parse_word_definition(message):
+    word = __get_word_definition(message)
+    word_definition = word.name + "\n" + word.origin + "\n" + word.phonetic + "\n"
+    for definition in word.definitions:
+        word_definition = word_definition + \
+                          definition.type + "\n" + \
+                          definition.definition + "\n" + \
+                          definition.example + "\n" + \
+                          ' '.join(definition.synonyms) + "\n\n"
+    return word_definition
+
+
+word_dictionary = __load_words()
+
+
+def get_random_words(number):
+    random_numbers = random.sample(word_dictionary, number)
+    result = ""
+    for word in random_numbers:
+        result = result + message_generator.Emoji.zap + word.name + "\n" + word.translation + "\n\n"
+    return result
