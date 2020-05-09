@@ -16,7 +16,7 @@ def __load_words():
     return word_list
 
 
-def __get_word_meaning(meaning):
+def __parse_word_meaning(meaning):
     meanings = []
     keys = ['noun', 'exclamation', 'transitive verb']
     for key in keys:
@@ -30,7 +30,7 @@ def __get_word_meaning(meaning):
     return meanings
 
 
-def __get_word_definition(word):
+def __parse_word_definition(word):
     response = requests.get('https://api.dictionaryapi.dev/api/v1/entries/en/' + word)
     if response.status_code != 200:
         raise Exception('Can not load words due to error {}'.format(response.status_code))
@@ -38,11 +38,11 @@ def __get_word_definition(word):
     return WordDefinition(data['word'],
                           data.get('phonetic', ''),
                           data.get('origin', ''),
-                          __get_word_meaning(data['meaning']))
+                          __parse_word_meaning(data['meaning']))
 
 
 def parse_word_definition(message):
-    word = __get_word_definition(message)
+    word = __parse_word_definition(message)
     word_definition = word.name + "\n" + word.origin + "\n" + word.phonetic + "\n"
     for definition in word.definitions:
         word_definition = word_definition + \

@@ -54,6 +54,10 @@ def command_help(message):
 
 @bot.message_handler(commands=['translate'])
 def command_translate(message):
+    bot.register_next_step_handler_by_chat_id(message.chat.id, callback=command_translate_word)
+
+
+def command_translate_word(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
         bot.send_message(message.chat.id, english_api.parse_word_definition(message.text.lower()))
