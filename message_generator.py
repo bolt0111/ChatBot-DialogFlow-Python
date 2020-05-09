@@ -1,10 +1,4 @@
-import random
-
 from emoji import emojize
-
-import eng_api
-
-word_dictionary = eng_api.load_words()
 
 
 class Sticker:
@@ -15,22 +9,14 @@ class Sticker:
 class Emoji:
     zap = emojize(":zap:", use_aliases=True)
     smile = emojize(":relaxed:", use_aliases=True)
+    sad = emojize(':pensive:', use_aliases=True)
+    confused = emojize(':face_with_monocle:', use_aliases=True)
 
 
-def random_words(number):
-    random_numbers = random.sample(word_dictionary, number)
-    result = ""
-    for word in random_numbers:
-        result = result + Emoji.zap + word.name + "\n" + word.translation + "\n\n"
-    return result
-
-
-def hello_message():
-    return "Hey! This is Baya Bot, let's learn English " + Emoji.smile
-
-
-def error_message():
-    return "Oh well ... Something went wrong"
+class Message:
+    hello = "Hey! This is Baya Bot, let's learn English " + Emoji.smile
+    error = "Oh well ... Something went wrong " + Emoji.sad
+    unknown_answer = "Oh well, I missed what you said. What was that? " + Emoji.confused
 
 
 def message_help(commands):
@@ -38,15 +24,3 @@ def message_help(commands):
     for key in commands:
         help_text += "/" + key + ": " + commands[key] + "\n"
     return help_text
-
-
-def parse_word_definition(message):
-    word = eng_api.get_word_definition(message)
-    word_definition = word.name + "\n" + word.origin + "\n" + word.phonetic + "\n"
-    for definition in word.definitions:
-        word_definition = word_definition + \
-                          definition.type + "\n" + \
-                          definition.definition + "\n" + \
-                          definition.example + "\n" + \
-                          ' '.join(definition.synonyms) + "\n\n"
-    return word_definition
