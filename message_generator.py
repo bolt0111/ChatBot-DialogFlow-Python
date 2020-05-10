@@ -21,6 +21,8 @@ class Message:
     word_not_found = "Sorry, I can't find definitions for the word you were looking for " + Emoji.confused
     error_not_translated = "Sorry, I can't translate word " + Emoji.sad
     unknown_answer = "Oh well, I missed what you said. What was that? " + Emoji.confused
+    learn_5_words = "Let's learn 5 words everyday " + Emoji.smile
+    stop_learn_5_words = "Finished. I hope you will continue learning words " + Emoji.smile
 
 
 def message_help(commands):

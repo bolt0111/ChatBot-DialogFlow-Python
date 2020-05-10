@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 import schedule
 import telebot
@@ -32,7 +33,9 @@ def command_start(message):
 @bot.message_handler(commands=['subscribe'])
 def command_subscribe(message):
     try:
-        schedule.every().day.at('12:00').do(subscribe_message, message).tag(message.chat.id)
+        bot.send_message(message.chat.id, message_generator.Message.learn_5_words)
+        current_time = datetime.now().strftime('%H:%M')
+        schedule.every().day.at(current_time).do(subscribe_message, message).tag(message.chat.id)
         # schedule.every(10).seconds.do(subscribe_message, message).tag(message.chat.id)
         while True:
             schedule.run_pending()
@@ -45,6 +48,7 @@ def command_subscribe(message):
 def command_unsubscribe(message):
     try:
         schedule.clear(message.chat.id)
+        bot.send_message(message.chat.id, message_generator.Message.stop_learn_5_words)
     except Exception as e:
         print("unsubscribe error: " + str(e) + "\n")
 
