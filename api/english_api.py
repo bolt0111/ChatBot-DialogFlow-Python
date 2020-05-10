@@ -1,5 +1,7 @@
 import random
 
+import googletrans
+import langid
 import requests
 
 import message_generator
@@ -14,6 +16,17 @@ def __load_words():
     for word in response.json()['data']:
         word_list.append(WordTranslation(word['name'], word['detail']))
     return word_list
+
+
+word_dictionary = __load_words()
+
+
+def get_random_words(number):
+    random_numbers = random.sample(word_dictionary, number)
+    result = ""
+    for word in random_numbers:
+        result = result + message_generator.Emoji.zap + word.name + "\n" + word.translation + "\n\n"
+    return result
 
 
 def __parse_word_meaning(meaning):
@@ -42,17 +55,11 @@ def __parse_word_definition(word):
 
 
 def __parse_synonyms(synonyms):
-    if synonyms is not None:
-        return "*Synonyms:* " + ' / '.join(synonyms) + "\n"
-    else:
-        return ""
+    return "*Synonyms:* " + ' / '.join(synonyms) + "\n" if synonyms is not None else ""
 
 
 def __parse_information(definition_name, definition):
-    if definition is not None:
-        return definition_name + " " + definition + "\n"
-    else:
-        return ""
+    return definition_name + " " + definition + "\n" if definition is not None else ""
 
 
 def parse_word_definition(message):
@@ -70,12 +77,8 @@ def parse_word_definition(message):
     return word_definition
 
 
-word_dictionary = __load_words()
-
-
-def get_random_words(number):
-    random_numbers = random.sample(word_dictionary, number)
-    result = ""
-    for word in random_numbers:
-        result = result + message_generator.Emoji.zap + word.name + "\n" + word.translation + "\n\n"
-    return result
+def translate(word):
+    lang = langid.classify(word)
+    translation_language = 'ru' if lang[0] == 'en' else 'en'
+    translator = googletrans.Translator()
+    return translator.translate(word, dest=translation_language).text

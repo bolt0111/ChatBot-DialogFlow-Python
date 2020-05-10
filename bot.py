@@ -15,7 +15,8 @@ apihelper.proxy = {'https': security.PROXY}
 commands = {  # command description used in the "help" command
     'start': 'Start learning English',
     'help': 'Information about the available commands',
-    'translate': 'Get word meaning and full information',
+    'meaning': 'Get word meaning and full information',
+    'translate': 'Get translation',
     'subscribe': 'Start learning English by 5 words everyday',
     'unsubscribe': 'Stop sending 5 words'
 }
@@ -53,12 +54,12 @@ def command_help(message):
     bot.send_message(message.chat.id, message_generator.message_help(commands))
 
 
-@bot.message_handler(commands=['translate'])
-def command_translate(message):
-    bot.register_next_step_handler_by_chat_id(message.chat.id, callback=command_translate_word)
+@bot.message_handler(commands=['meaning'])
+def command_meaning(message):
+    bot.register_next_step_handler_by_chat_id(message.chat.id, callback=command_meaning_handler)
 
 
-def command_translate_word(message):
+def command_meaning_handler(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
         bot.send_message(message.chat.id, english_api.parse_word_definition(message.text.lower()),
@@ -66,6 +67,20 @@ def command_translate_word(message):
     except Exception as e:
         print("Error with getting word definition: " + str(e))
         bot.send_message(message.chat.id, message_generator.Message.word_not_found)
+
+
+@bot.message_handler(commands=['translate'])
+def command_translate(message):
+    bot.register_next_step_handler_by_chat_id(message.chat.id, callback=command_translate_handler)
+
+
+def command_translate_handler(message):
+    try:
+        bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
+        bot.send_message(message.chat.id, english_api.translate(message.text.lower()))
+    except Exception as e:
+        print("Error with getting word translation: " + str(e))
+        bot.send_message(message.chat.id, message_generator.Message.error_not_translated)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
