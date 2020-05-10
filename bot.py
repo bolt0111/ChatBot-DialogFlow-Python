@@ -31,7 +31,8 @@ def command_start(message):
 @bot.message_handler(commands=['subscribe'])
 def command_subscribe(message):
     try:
-        schedule.every().day.at('12:00').do(subscribe_message, message)
+        schedule.every().day.at('12:00').do(subscribe_message, message).tag(message.chat.id)
+        # schedule.every(10).seconds.do(subscribe_message, message).tag(message.chat.id)
         while True:
             schedule.run_pending()
             time.sleep(1)
@@ -40,9 +41,9 @@ def command_subscribe(message):
 
 
 @bot.message_handler(commands=['unsubscribe'])
-def command_unsubscribe():
+def command_unsubscribe(message):
     try:
-        schedule.cancel_job(subscribe_message)
+        schedule.clear(message.chat.id)
     except Exception as e:
         print("unsubscribe error: " + str(e) + "\n")
 
