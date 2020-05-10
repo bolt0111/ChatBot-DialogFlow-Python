@@ -18,6 +18,7 @@ class Emoji:
 class Message:
     hello = "Hey! This is Baya Bot, let's learn English " + Emoji.smile
     error = "Oh well ... Something went wrong " + Emoji.sad
+    word_not_found = "Sorry, I can't find definitions for the word you were looking for " + Emoji.confused
     unknown_answer = "Oh well, I missed what you said. What was that? " + Emoji.confused
 
 

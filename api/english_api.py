@@ -33,7 +33,7 @@ def __parse_word_meaning(meaning):
 def __parse_word_definition(word):
     response = requests.get('https://api.dictionaryapi.dev/api/v1/entries/en/' + word)
     if response.status_code != 200:
-        raise Exception('Can not load words due to error {}'.format(response.status_code))
+        raise Exception('Can not load words due to error: {}'.format(response.json().get('message')))
     data = response.json()[0]
     return WordDefinition(data['word'],
                           data.get('phonetic', None),

@@ -64,8 +64,7 @@ def command_translate_word(message):
                          parse_mode='Markdown')
     except Exception as e:
         print("Error with getting word definition: " + str(e))
-        bot.send_message(message.chat.id, message_generator.Message.error)
-        bot.send_sticker(message.chat.id, message_generator.Sticker.error)
+        bot.send_message(message.chat.id, message_generator.Message.word_not_found)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
@@ -75,8 +74,8 @@ def send_message(message):
         bot.send_message(message.chat.id, dialog_flow.call_small_talk(message.text.lower()))
     except Exception as e:
         print("Error with getting answer from small talk: " + str(e))
-        bot.send_message(message.chat.id, message_generator.Message.unknown_answer)
         bot.send_sticker(message.chat.id, message_generator.Sticker.error)
+        bot.send_message(message.chat.id, message_generator.Message.unknown_answer)
 
 
 def subscribe_message(message):
