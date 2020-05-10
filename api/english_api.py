@@ -18,7 +18,7 @@ def __load_words():
 
 def __parse_word_meaning(meaning):
     meanings = []
-    keys = ['noun', 'exclamation', 'transitive verb']
+    keys = ['noun', 'exclamation', 'transitive verb', 'adjective', 'verb', 'preposition', 'conjunction', 'adverb']
     for key in keys:
         meaning_key = meaning.get(key)
         if meaning_key is not None:
