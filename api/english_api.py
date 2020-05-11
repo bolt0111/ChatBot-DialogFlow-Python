@@ -1,3 +1,4 @@
+import json
 import random
 
 import googletrans
@@ -5,17 +6,20 @@ import langid
 import requests
 
 import message_generator
-from api.word import WordTranslation, WordMeaning, WordDefinition
+import security
+from api.word import WordTranslation, WordDefinition
 
 
 def __load_words():
     word_list = []
-    response = requests.get('https://www.randomlists.com/data/vocabulary-words.json')
-    if response.status_code != 200:
-        raise Exception('Can not load words due to error {}'.format(response.status_code))
-    for word in response.json()['data']:
-        word_list.append(WordTranslation(word['name'], word['detail']))
-    return word_list
+    try:
+        with open('api/words.json') as f:
+            words = json.load(f)
+        for word in words['data']:
+            word_list.append(WordTranslation(word['name'], word['detail']))
+        return word_list
+    except Exception as e:
+        raise Exception('Can not load words ' + str(e))
 
 
 word_dictionary = __load_words()
@@ -29,37 +33,23 @@ def get_random_words(number):
     return result
 
 
-def __parse_word_meaning(meaning):
-    meanings = []
-    keys = ['noun', 'exclamation', 'transitive verb', 'adjective', 'verb', 'preposition', 'conjunction', 'adverb']
-    for key in keys:
-        meaning_key = meaning.get(key)
-        if meaning_key is not None:
-            meaning_noun = meaning_key[0]
-            meanings.append(WordMeaning(key,
-                                        meaning_noun.get('definition', None),
-                                        meaning_noun.get('example', None),
-                                        meaning_noun.get('synonyms', None)))
-    return meanings
-
-
 def __parse_word_definition(word):
-    response = requests.get('https://api.dictionaryapi.dev/api/v1/entries/en/' + word)
+    language = "en-gb"
+    url = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + language + "/" + word.lower()
+    response = requests.get(url, headers={"app_id": security.OXFORD_ID, "app_key": security.OXFORD_APP})
     if response.status_code != 200:
         raise Exception('Can not load words due to error: {}'.format(response.json().get('message')))
-    data = response.json()[0]
-    return WordDefinition(data['word'],
-                          data.get('phonetic', None),
-                          data.get('origin', None),
-                          __parse_word_meaning(data['meaning']))
-
-
-def __parse_synonyms(synonyms):
-    return "*Synonyms:* " + ' / '.join(synonyms) + "\n" if synonyms is not None else ""
+    return WordDefinition(response.json())
 
 
 def __parse_information(definition_name, definition):
-    return definition_name + " " + definition + "\n" if definition is not None else ""
+    if definition is not None:
+        if type(definition) is not str:
+            return definition_name + " " + ' / '.join(definition) + "\n"
+        else:
+            return definition_name + " " + definition + "\n"
+    else:
+        return ""
 
 
 def parse_word_definition(message):
@@ -73,7 +63,7 @@ def parse_word_definition(message):
                           __parse_information(message_generator.Emoji.check, definition.type) + \
                           __parse_information("*Meaning:*", definition.definition) + \
                           __parse_information("*Example:*", definition.example) + \
-                          __parse_synonyms(definition.synonyms) + "\n"
+                          __parse_information("*Synonyms:*", definition.synonyms) + "\n"
     return word_definition
 
 

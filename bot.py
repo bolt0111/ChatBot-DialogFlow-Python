@@ -26,7 +26,7 @@ commands = {  # command description used in the "help" command
 @bot.message_handler(commands=['start'])
 def command_start(message):
     bot.send_sticker(message.chat.id, message_generator.Sticker.start)
-    bot.send_message(message.chat.id, message_generator.Message.hello)
+    bot.send_message(message.chat.id, message_generator.Message.greeting)
     command_help(message)
 
 
@@ -78,20 +78,28 @@ def command_translate(message):
     bot.register_next_step_handler_by_chat_id(message.chat.id, callback=command_translate_handler)
 
 
-def command_translate_handler(message):
+def command_translate_handler(message, translation_from_command=True):
     try:
         bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
-        bot.send_message(message.chat.id, english_api.translate(message.text.lower()))
+        if translation_from_command:
+            bot.send_message(message.chat.id, english_api.translate(message.text.lower()))
+        else:
+            word = message.text.split('"')[1]
+            bot.send_message(message.chat.id, message_generator.Message.translate_word + word)
+            bot.send_message(message.chat.id, english_api.translate(word))
     except Exception as e:
         print("Error with getting word translation: " + str(e))
-        bot.send_message(message.chat.id, message_generator.Message.error_not_translated)
+        bot.send_message(message.chat.id, message_generator.Message.word_not_translated)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def send_message(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')  # show the bot "typing" (max. 5 secs)
-        bot.send_message(message.chat.id, dialog_flow.call_small_talk(message.text.lower()))
+        if 'translate' in message.text.lower():
+            command_translate_handler(message, False)
+        else:
+            bot.send_message(message.chat.id, dialog_flow.call_small_talk(message.text.lower()))
     except Exception as e:
         print("Error with getting answer from small talk: " + str(e))
         bot.send_sticker(message.chat.id, message_generator.Sticker.error)

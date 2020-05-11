@@ -16,13 +16,14 @@ class Emoji:
 
 
 class Message:
-    hello = "Hey! This is Baya Bot, let's learn English " + Emoji.smile
-    error = "Oh well ... Something went wrong " + Emoji.sad
+    greeting = "Hey! This is Baya Bot, let's learn English " + Emoji.smile
+    api_error = "Oh well ... Something went wrong " + Emoji.sad
     word_not_found = "Sorry, I can't find definitions for the word you were looking for " + Emoji.confused
-    error_not_translated = "Sorry, I can't translate word " + Emoji.sad
+    word_not_translated = "Sorry, I can't translate word " + Emoji.sad
     unknown_answer = "Oh well, I missed what you said. What was that? " + Emoji.confused
     learn_5_words = "Let's learn 5 words everyday " + Emoji.smile
     stop_learn_5_words = "Finished. I hope you will continue learning words " + Emoji.smile
+    translate_word = "Try to translate: "
 
 
 def message_help(commands):
