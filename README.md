@@ -1,20 +1,27 @@
-# :information_desk_person: BayaBot - Learn english with Baya Bot
-&nbsp;
+# BayaBot
+> Learn english with Baya Bot
+
 ![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/icon.png)
 
 &nbsp;
-## How to start :star:
-#### :heavy_check_mark: Search bot `@BayaEngBot` and start conversation with Baya with `/start` command
-![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/start.png)
+## Telegram RPC commands :triangular_flag_on_post:
+- `/start` - starts **BayaBot**
+- `/help` - shows all supported commands
+- `/translate` - translates word (supported languages: `en/ru`)
+- `/meaning` - gets word definition: meaning, transcriprtions, examples
+- `/subscribe` - subscribes to learn 5 words every day with Baya
+- `/unsubscribe` - stops sending 5 words
+
 &nbsp;
-#### :heavy_check_mark: Baya support small talk
-![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/smalltalk.png)
+## Supported API, libraries :heavy_exclamation_mark:
+- **Oxford Dictionaries** - for getting word meaning, see more [Oxford Dictionaries API](https://developer.oxforddictionaries.com/)
+- **googletrans/langid** - libraries, which used for translation
+- **DialogFlow Small Talk Agent** - for bots small talk, see more [DialogFlow API](https://dialogflow.cloud.google.com/)
+- **pyTelegramBotAPI** - for telegram bot creation
+- **pythonanywhere** - for hosting bot, see more [www.pythonanywhere.com](https://www.pythonanywhere.com/)
+
 &nbsp;
-#### :heavy_check_mark: Baya could help you to translate words with `/translate` command
-![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/translate.png)
-&nbsp;
-#### :heavy_check_mark: Baya could give you word definition with transcription, definition and different meanings with `/meaning` command
-![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/meaning.png)
-&nbsp;
-#### :heavy_check_mark: Subscribe to learn 5 words every day with Baya
-![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/subscribe.png)
+## How to start :innocent:
+#### Search bot `@BayaEngBot` and start conversation with Baya with `/start` command
+![](https://github.com/ElinaValieva/BayaBot/blob/master/markdown/markdown.gif)
+
