@@ -7,8 +7,7 @@ from telebot import apihelper
 
 import api.dialogflow_api as dialog_flow
 import api.english_api as english_api
-import message_generator
-import security
+from common import message_generator, security
 
 bot = telebot.TeleBot(security.TOKEN)
 apihelper.proxy = {'https': security.PROXY}

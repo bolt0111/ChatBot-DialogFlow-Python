@@ -2,7 +2,7 @@ import json
 
 import apiai
 
-import security
+from common import security
 
 
 def call_small_talk(message):

@@ -5,8 +5,7 @@ import googletrans
 import langid
 import requests
 
-import message_generator
-import security
+from common import message_generator, security
 from api.word import WordTranslation, WordDefinition
 
 
